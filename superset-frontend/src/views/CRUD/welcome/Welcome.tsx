@@ -25,9 +25,9 @@ import withToasts from 'src/messageToasts/enhancers/withToasts';
 import Loading from 'src/components/Loading';
 import { getRecentAcitivtyObjs, mq } from '../utils';
 
-import ActivityTable from './ActivityTable';
+//import ActivityTable from './ActivityTable';
 import ChartTable from './ChartTable';
-import SavedQueries from './SavedQueries';
+//import SavedQueries from './SavedQueries';
 import DashboardTable from './DashboardTable';
 
 interface WelcomeProps {
@@ -83,7 +83,7 @@ const WelcomeContainer = styled.div`
 
 function Welcome({ user, addDangerToast }: WelcomeProps) {
   const recent = `/superset/recent_activity/${user.userId}/?limit=6`;
-  const [activeChild, setActiveChild] = useState('Viewed');
+  //const [activeChild, setActiveChild] = useState('Viewed');
   const [activityData, setActivityData] = useState<ActivityData>({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -103,10 +103,10 @@ function Welcome({ user, addDangerToast }: WelcomeProps) {
         if (res.viewed) {
           const filtered = reject(res.viewed, ['item_url', null]).map(r => r);
           data.Viewed = filtered;
-          setActiveChild('Viewed');
+          //setActiveChild('Viewed');
         } else {
           data.Examples = res.examples;
-          setActiveChild('Examples');
+          //setActiveChild('Examples');
         }
         setActivityData(data);
         setLoading(false);
@@ -121,8 +121,8 @@ function Welcome({ user, addDangerToast }: WelcomeProps) {
 
   return (
     <WelcomeContainer>
-      <Collapse defaultActiveKey={['1', '2', '3', '4']} ghost bigger>
-        <Collapse.Panel header={t('Recents')} key="1">
+      <Collapse defaultActiveKey={['1','2']} ghost bigger>
+        {/*<Collapse.Panel header={t('Recents')} key="1">
           <ActivityTable
             user={user}
             activeChild={activeChild}
@@ -130,8 +130,8 @@ function Welcome({ user, addDangerToast }: WelcomeProps) {
             loading={loading}
             activityData={activityData}
           />
-        </Collapse.Panel>
-        <Collapse.Panel header={t('Dashboards')} key="2">
+        </Collapse.Panel>*/}
+        <Collapse.Panel header={t('Tableros')} key="1">
           {loading ? (
             <Loading position="inline" />
           ) : (
@@ -142,14 +142,14 @@ function Welcome({ user, addDangerToast }: WelcomeProps) {
             />
           )}
         </Collapse.Panel>
-        <Collapse.Panel header={t('Saved Queries')} key="3">
+        {/*<Collapse.Panel header={t('Saved Queries')} key="3">
           {loading ? (
             <Loading position="inline" />
           ) : (
             <SavedQueries user={user} mine={activityData.myQuery} />
           )}
-        </Collapse.Panel>
-        <Collapse.Panel header={t('Charts')} key="4">
+        </Collapse.Panel>*/}
+        <Collapse.Panel header={t('Graficas')} key="4">
           {loading ? (
             <Loading position="inline" />
           ) : (
