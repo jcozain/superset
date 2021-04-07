@@ -45,7 +45,7 @@ const Title = styled.label`
 function Subheader() {
   return (
     <SubheaderContainer>
-      <Title>Dashboards</Title>
+      <Title>Datos abiertos</Title>
     </SubheaderContainer>
   );
 }
