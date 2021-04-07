@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/*
 import React, { useEffect, useState } from 'react';
 import { styled, t } from '@superset-ui/core';
 import Collapse from 'src/components/Collapse';
@@ -40,6 +41,13 @@ import { Switch } from 'src/common/components';
 import ActivityTable from './ActivityTable';
 import ChartTable from './ChartTable';
 import SavedQueries from './SavedQueries';
+*/
+import React from 'react';
+import { styled } from '@superset-ui/core';
+import { User } from 'src/types/bootstrapTypes';
+import withToasts from 'src/messageToasts/enhancers/withToasts';
+import { mq } from '../utils';
+
 import DashboardTable from './DashboardTable';
 
 interface WelcomeProps {
@@ -83,7 +91,7 @@ const WelcomeContainer = styled.div`
   }
 `;
 
-const WelcomeNav = styled.div`
+/*const WelcomeNav = styled.div`
   height: 50px;
   background-color: white;
   .navbar-brand {
@@ -101,9 +109,10 @@ const WelcomeNav = styled.div`
       line-height: 1;
     }
   }
-`;
+`;*/
 
 function Welcome({ user, addDangerToast }: WelcomeProps) {
+  /*
   const recent = `/superset/recent_activity/${user.userId}/?limit=6`;
   const [activeChild, setActiveChild] = useState('Loading');
   const [checked, setChecked] = useState(true);
@@ -201,9 +210,11 @@ function Welcome({ user, addDangerToast }: WelcomeProps) {
       ],
     }));
   }, [chartData, queryData, dashboardData]);
-
+*/
   return (
-    <WelcomeContainer>
+  
+     <WelcomeContainer>
+       {/*
       <WelcomeNav>
         <span className="navbar-brand">Home</span>
         {isFeatureEnabled(FeatureFlag.THUMBNAILS) ? (
@@ -261,7 +272,11 @@ function Welcome({ user, addDangerToast }: WelcomeProps) {
             <ChartTable showThumbnails={checked} user={user} mine={chartData} />
           )}
         </Collapse.Panel>
-      </Collapse>
+      </Collapse> */}
+      <DashboardTable
+        user={user}
+        addDangerToast={addDangerToast}
+      />
     </WelcomeContainer>
   );
 }
