@@ -75,7 +75,7 @@ const StyledCard = styled(AntdCard)`
 `;
 
 const Cover = styled.div`
-  height: 264px;
+  height: 164px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale.light2};
   overflow: hidden;
 
