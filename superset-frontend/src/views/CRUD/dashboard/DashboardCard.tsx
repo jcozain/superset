@@ -27,7 +27,6 @@ import { Dropdown, Menu } from 'src/common/components';
 import ConfirmStatusChange from 'src/components/ConfirmStatusChange';
 import ListViewCard from 'src/components/ListViewCard';
 import Icon from 'src/components/Icon';
-import Label from 'src/components/Label';
 import FacePile from 'src/components/FacePile';
 import FaveStar from 'src/components/FaveStar';
 import { Dashboard } from 'src/views/CRUD/types';
@@ -46,6 +45,8 @@ interface DashboardCardProps {
   favoriteStatus: boolean;
   dashboardFilter?: string;
   userId?: number;
+  coverLeft?: boolean;
+  actions?: boolean;
 }
 
 function DashboardCard({
@@ -60,6 +61,8 @@ function DashboardCard({
   openDashboardEditModal,
   favoriteStatus,
   saveFavoriteStatus,
+  coverLeft = true,
+  actions = true,
 }: DashboardCardProps) {
   const canEdit = hasPerm('can_write');
   const canDelete = hasPerm('can_write');
@@ -134,18 +137,11 @@ function DashboardCard({
       <ListViewCard
         loading={dashboard.loading || false}
         title={dashboard.dashboard_title}
-        titleRight={
-          <Label>{dashboard.published ? 'published' : 'draft'}</Label>
-        }
         url={bulkSelectEnabled ? undefined : dashboard.url}
         imgURL={dashboard.thumbnail_url}
         imgFallbackURL="/static/assets/images/dashboard-card-fallback.svg"
-        description={t(
-          'Last modified %s',
-          dashboard.changed_on_delta_humanized,
-        )}
-        coverLeft={<FacePile users={dashboard.owners || []} />}
-        actions={
+        coverLeft={coverLeft && <FacePile users={dashboard.owners || []} />}
+        actions={ actions &&
           <ListViewCard.Actions
             onClick={e => {
               e.stopPropagation();

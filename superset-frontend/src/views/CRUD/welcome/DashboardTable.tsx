@@ -16,20 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, { useState, useMemo } from 'react';
-import { SupersetClient, t } from '@superset-ui/core';
-import { useListViewResource, useFavoriteStatus } from 'src/views/CRUD/hooks';
+import React, { useEffect } from 'react';
+import { t } from '@superset-ui/core';
+import { useListViewResource } from 'src/views/CRUD/hooks';
 import { Dashboard, DashboardTableProps } from 'src/views/CRUD/types';
-import { useHistory } from 'react-router-dom';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
-import PropertiesModal from 'src/dashboard/components/PropertiesModal';
 import DashboardCard from 'src/views/CRUD/dashboard/DashboardCard';
-import SubMenu from 'src/components/Menu/SubMenu';
-import Icon from 'src/components/Icon';
 import EmptyState from './EmptyState';
-import { createErrorHandler, CardContainer, IconContainer } from '../utils';
+import { CardContainer } from '../utils';
+import Loading from 'src/components/Loading';
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 15;
 
 export interface FilterValue {
   col: string;
@@ -41,12 +38,10 @@ function DashboardTable({
   user,
   addDangerToast,
   addSuccessToast,
-  mine,
 }: DashboardTableProps) {
-  const history = useHistory();
+
   const {
     state: { loading, resourceCollection: dashboards },
-    setResourceCollection: setDashboards,
     hasPerm,
     refreshData,
     fetchData,
@@ -54,66 +49,29 @@ function DashboardTable({
     'dashboard',
     t('dashboard'),
     addDangerToast,
-    true,
-    mine,
+    true
   );
-  const dashboardIds = useMemo(() => dashboards.map(c => c.id), [dashboards]);
-  const [saveFavoriteStatus, favoriteStatus] = useFavoriteStatus(
-    'dashboard',
-    dashboardIds,
-    addDangerToast,
-  );
-  const [editModal, setEditModal] = useState<Dashboard>();
-  const [dashboardFilter, setDashboardFilter] = useState('Mine');
 
-  const handleDashboardEdit = (edits: Dashboard) =>
-    SupersetClient.get({
-      endpoint: `/api/v1/dashboard/${edits.id}`,
-    }).then(
-      ({ json = {} }) => {
-        setDashboards(
-          dashboards.map(dashboard => {
-            if (dashboard.id === json.id) {
-              return json.result;
-            }
-            return dashboard;
-          }),
-        );
-      },
-      createErrorHandler(errMsg =>
-        addDangerToast(
-          t('An error occurred while fetching dashboards: %s', errMsg),
-        ),
-      ),
-    );
 
-  const getFilters = (filterName: string) => {
-    const filters = [];
-    if (filterName === 'Mine') {
-      filters.push({
-        id: 'owners',
-        operator: 'rel_m_m',
-        value: `${user?.userId}`,
-      });
-    } else {
-      filters.push({
-        id: 'id',
-        operator: 'dashboard_is_favorite',
-        value: true,
-      });
-    }
-    return filters;
-  };
-  const subMenus = [];
-  if (dashboards.length > 0 && dashboardFilter === 'favorite') {
-    subMenus.push({
-      name: 'Favorite',
-      label: t('Favorite'),
-      onClick: () => setDashboardFilter('Favorite'),
-    });
-  }
+    const getFilters = (filterName?: string) => {
+      const filters = [];
+      if (filterName === 'Mine') {
+        filters.push({
+          id: 'owners',
+          operator: 'rel_m_m',
+          value: `${user?.userId}`,
+        });
+      }  else if (filterName === 'Favorite') {
+        filters.push({
+          id: 'id',
+          operator: 'dashboard_is_favorite',
+          value: true,
+        });
+      }
+      return filters;
+    };
 
-  const getData = (filter: string) =>
+  const getData = (filter?: string) =>
     fetchData({
       pageIndex: 0,
       pageSize: PAGE_SIZE,
@@ -125,61 +83,21 @@ function DashboardTable({
       ],
       filters: getFilters(filter),
     });
+  console.log('DASHHH', dashboards);
+
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
-      <SubMenu
-        activeChild={dashboardFilter}
-        tabs={[
-          {
-            name: 'Favorite',
-            label: t('Favorite'),
-            onClick: () => {
-              getData('Favorite').then(() => setDashboardFilter('Favorite'));
-            },
-          },
-          {
-            name: 'Mine',
-            label: t('Mine'),
-            onClick: () => {
-              getData('Mine').then(() => setDashboardFilter('Mine'));
-            },
-          },
-        ]}
-        buttons={[
-          {
-            name: (
-              <IconContainer>
-                <Icon name="plus-small" /> Dashboard{' '}
-              </IconContainer>
-            ),
-            buttonStyle: 'tertiary',
-            onClick: () => {
-              window.location.assign('/dashboard/new');
-            },
-          },
-          {
-            name: 'View All »',
-            buttonStyle: 'link',
-            onClick: () => {
-              const target =
-                dashboardFilter === 'Favorite'
-                  ? '/dashboard/list/?filters=(favorite:!t)'
-                  : '/dashboard/list/';
-              history.push(target);
-            },
-          },
-        ]}
-      />
-      {editModal && (
-        <PropertiesModal
-          dashboardId={editModal?.id}
-          show
-          onHide={() => setEditModal(undefined)}
-          onSubmit={handleDashboardEdit}
-        />
-      )}
-      {dashboards.length > 0 && (
+      
+      {loading ? (
+        <Loading position="inline" />
+      ) : (
+        <>
+          {dashboards.length > 0 && (
         <CardContainer>
           {dashboards.map(e => (
             <DashboardCard
@@ -187,24 +105,26 @@ function DashboardTable({
               dashboard={e}
               hasPerm={hasPerm}
               bulkSelectEnabled={false}
-              dashboardFilter={dashboardFilter}
               refreshData={refreshData}
               addDangerToast={addDangerToast}
               addSuccessToast={addSuccessToast}
               userId={user?.userId}
               loading={loading}
-              openDashboardEditModal={(dashboard: Dashboard) =>
-                setEditModal(dashboard)
-              }
-              saveFavoriteStatus={saveFavoriteStatus}
-              favoriteStatus={favoriteStatus[e.id]}
+              openDashboardEditModal={() => {}}
+              saveFavoriteStatus={(id: number, isStarred: boolean) => {}}
+              favoriteStatus={false}
+              coverLeft={false}
+              actions={false}
             />
           ))}
         </CardContainer>
       )}
       {dashboards.length === 0 && (
-        <EmptyState tableName="DASHBOARDS" tab={dashboardFilter} />
+        <EmptyState tableName="DASHBOARDS" tab={'Dashboards'} />
       )}
+        </>     
+      )}
+
     </>
   );
 }

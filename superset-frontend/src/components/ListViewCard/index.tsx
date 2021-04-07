@@ -150,7 +150,7 @@ interface CardProps {
   imgURL?: string;
   imgFallbackURL?: string;
   imgPosition?: BackgroundPosition;
-  description: string;
+  description?: string;
   loading?: boolean;
   titleRight?: React.ReactNode;
   coverLeft?: React.ReactNode;
@@ -240,7 +240,7 @@ function ListViewCard({
               </div>
             </TitleContainer>
           }
-          description={description}
+          description={(description ? description : '')}
           // @ts-ignore
           avatar={avatar ? <Icon name={avatar} /> : null}
         />

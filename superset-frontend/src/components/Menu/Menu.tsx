@@ -16,17 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { t, styled } from '@superset-ui/core';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
-import NavDropdown from 'src/components/NavDropdown';
-import { Menu as DropdownMenu } from 'src/common/components';
-import MenuObject, {
+// import NavDropdown from 'src/components/NavDropdown';
+// import { Menu as DropdownMenu } from 'src/common/components';
+import {
   MenuObjectProps,
   MenuObjectChildProps,
 } from './MenuObject';
 import LanguagePicker, { Languages } from './LanguagePicker';
-import NewMenu from './NewMenu';
+// import NewMenu from './NewMenu';
 
 interface BrandProps {
   path: string;
@@ -154,8 +154,8 @@ const StyledHeader = styled.header`
 export function Menu({
   data: { menu, brand, navbar_right: navbarRight, settings },
 }: MenuProps) {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  // const [dropdownOpen, setDropdownOpen] = useState(false);
+  console.log('HOLAA', menu);
   return (
     <StyledHeader className="top" id="main-menu">
       <Navbar inverse fluid staticTop role="navigation">
@@ -167,13 +167,13 @@ export function Menu({
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
-        <Nav data-test="navbar-top">
+        {/*<Nav data-test="navbar-top">
           {menu.map((item, index) => (
             <MenuObject {...item} key={item.label} index={index + 1} />
           ))}
-        </Nav>
+          </Nav>*/}
         <Nav className="navbar-right">
-          {!navbarRight.user_is_anonymous && <NewMenu />}
+          {/*{!navbarRight.user_is_anonymous && <NewMenu />}
           <NavDropdown
             id="settings-dropdown"
             title={t('Settings')}
@@ -256,7 +256,7 @@ export function Menu({
               <i className="fa fa-bug" />
               &nbsp;
             </NavItem>
-          )}
+          )}*/}
           {navbarRight.show_language_picker && (
             <LanguagePicker
               locale={navbarRight.locale}
@@ -267,6 +267,12 @@ export function Menu({
             <NavItem href={navbarRight.user_login_url}>
               <i className="fa fa-fw fa-sign-in" />
               {t('Login')}
+            </NavItem>
+          )}
+          {!navbarRight.user_is_anonymous && (
+            <NavItem href={navbarRight.user_logout_url}>
+              <i className="fa fa-fw fa-sign-out" />
+              {t('Logout')}
             </NavItem>
           )}
         </Nav>

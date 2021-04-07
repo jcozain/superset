@@ -16,18 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, { useEffect, useState } from 'react';
-import { styled, t } from '@superset-ui/core';
-import { Collapse } from 'src/common/components';
+import React from 'react';
+import { styled } from '@superset-ui/core';
 import { User } from 'src/types/bootstrapTypes';
-import { reject } from 'lodash';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
-import Loading from 'src/components/Loading';
-import { getRecentAcitivtyObjs, mq } from '../utils';
+import { mq } from '../utils';
 
-//import ActivityTable from './ActivityTable';
-import ChartTable from './ChartTable';
-//import SavedQueries from './SavedQueries';
 import DashboardTable from './DashboardTable';
 
 interface WelcomeProps {
@@ -82,81 +76,12 @@ const WelcomeContainer = styled.div`
 `;
 
 function Welcome({ user, addDangerToast }: WelcomeProps) {
-  const recent = `/superset/recent_activity/${user.userId}/?limit=6`;
-  //const [activeChild, setActiveChild] = useState('Viewed');
-  const [activityData, setActivityData] = useState<ActivityData>({});
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    getRecentAcitivtyObjs(user.userId, recent, addDangerToast)
-      .then(res => {
-        const data: any = {
-          Created: [
-            ...res.createdByChart,
-            ...res.createdByDash,
-            ...res.createdByQuery,
-          ],
-          myChart: res.createdByChart,
-          myDash: res.createdByDash,
-          myQuery: res.createdByQuery,
-          Edited: [...res.editedChart, ...res.editedDash],
-        };
-        if (res.viewed) {
-          const filtered = reject(res.viewed, ['item_url', null]).map(r => r);
-          data.Viewed = filtered;
-          //setActiveChild('Viewed');
-        } else {
-          data.Examples = res.examples;
-          //setActiveChild('Examples');
-        }
-        setActivityData(data);
-        setLoading(false);
-      })
-      .catch(e => {
-        setLoading(false);
-        addDangerToast(
-          `There was an issue fetching your recent acitivity: ${e}`,
-        );
-      });
-  }, []);
-
   return (
     <WelcomeContainer>
-      <Collapse defaultActiveKey={['1','2']} ghost bigger>
-        {/*<Collapse.Panel header={t('Recents')} key="1">
-          <ActivityTable
-            user={user}
-            activeChild={activeChild}
-            setActiveChild={setActiveChild}
-            loading={loading}
-            activityData={activityData}
-          />
-        </Collapse.Panel>*/}
-        <Collapse.Panel header={t('Tableros')} key="1">
-          {loading ? (
-            <Loading position="inline" />
-          ) : (
-            <DashboardTable
-              user={user}
-              mine={activityData.myDash}
-              isLoading={loading}
-            />
-          )}
-        </Collapse.Panel>
-        {/*<Collapse.Panel header={t('Saved Queries')} key="3">
-          {loading ? (
-            <Loading position="inline" />
-          ) : (
-            <SavedQueries user={user} mine={activityData.myQuery} />
-          )}
-        </Collapse.Panel>*/}
-        <Collapse.Panel header={t('Graficas')} key="4">
-          {loading ? (
-            <Loading position="inline" />
-          ) : (
-            <ChartTable user={user} mine={activityData.myChart} />
-          )}
-        </Collapse.Panel>
-      </Collapse>
+      <DashboardTable
+        user={user}
+        addDangerToast={addDangerToast}
+      />
     </WelcomeContainer>
   );
 }
