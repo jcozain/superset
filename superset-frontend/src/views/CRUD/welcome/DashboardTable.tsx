@@ -244,7 +244,7 @@ function DashboardTable({
     <>
       
       {loading ? (
-        <Loading position="inline" />
+       preparingExport && <Loading position="inline" />
       ) : (
         <>
           {dashboards.length > 0 && (

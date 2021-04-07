@@ -48,6 +48,7 @@ import { User } from 'src/types/bootstrapTypes';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
 import { mq } from '../utils';
 
+import Subheader from './Subheader';
 import DashboardTable from './DashboardTable';
 
 interface WelcomeProps {
@@ -62,8 +63,9 @@ export interface ActivityData {
   Examples?: Array<object>;
 }
 
+// background-color: ${({ theme }) => theme.colors.grayscale.light4};
 const WelcomeContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.grayscale.light4};
+  background: linear-gradient(rgba(252,98,32,1) 90vh, rgba(190,16,116,0.8), rgba(11,60,174,0.8));
   .ant-row.menu {
     margin-top: -15px;
     background-color: ${({ theme }) => theme.colors.grayscale.light4};
@@ -110,6 +112,9 @@ const WelcomeContainer = styled.div`
     }
   }
 `;*/
+const DashboardTableContainer = styled.div`
+  margin-top: 50vh;
+`;
 
 function Welcome({ user, addDangerToast }: WelcomeProps) {
   /*
@@ -273,10 +278,13 @@ function Welcome({ user, addDangerToast }: WelcomeProps) {
           )}
         </Collapse.Panel>
       </Collapse> */}
-      <DashboardTable
-        user={user}
-        addDangerToast={addDangerToast}
-      />
+      <Subheader/>
+      <DashboardTableContainer>
+        <DashboardTable
+          user={user}
+          addDangerToast={addDangerToast}
+        />
+      </DashboardTableContainer>
     </WelcomeContainer>
   );
 }
