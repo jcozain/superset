@@ -23,7 +23,7 @@ import withToasts from 'src/messageToasts/enhancers/withToasts';
 
 const SubheaderContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.grayscale.light4};
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(245, 246, 252, 0.1), rgba(245, 246, 252, 0.2) 85%, rgba(252,98,32,1) 100%), url(/static/assets/images/gto_landscape.jpg);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(50, 50, 50, 0.2), rgba(70, 70, 70, 0.3) 85%, rgba(33, 150, 243, 1) 100%), url(/static/assets/images/gto_landscape.jpg);
   height: 100vh;
   background-position: center;
   background-size: cover;
@@ -45,7 +45,7 @@ const Title = styled.label`
 function Subheader() {
   return (
     <SubheaderContainer>
-      <Title>Datos abiertos</Title>
+      <Title>Consulta y Analítica Prospectiva para la Gobernabilidad del Estado de Guanajuato</Title>
     </SubheaderContainer>
   );
 }
