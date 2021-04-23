@@ -298,7 +298,7 @@ export const mq = breakpoints.map(bp => `@media (max-width: ${bp}px)`);
 
 export const CardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(31%, 31%));
+  grid-template-columns: repeat(auto-fit, minmax(18%, 18%));
   ${[mq[3]]} {
     grid-template-columns: repeat(auto-fit, minmax(31%, 31%));
   }
@@ -310,8 +310,8 @@ export const CardContainer = styled.div`
   ${[mq[1]]} {
     grid-template-columns: repeat(auto-fit, minmax(50%, 80%));
   }
-  grid-gap: ${({ theme }) => theme.gridUnit * 8}px;
-  justify-content: left;
+  grid-gap: ${({ theme }) => theme.gridUnit * 5}px;
+  justify-content: center;
   padding: ${({ theme }) => theme.gridUnit * 6}px;
   padding-top: ${({ theme }) => theme.gridUnit * 2}px;
 `;

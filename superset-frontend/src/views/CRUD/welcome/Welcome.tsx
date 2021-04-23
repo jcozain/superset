@@ -64,7 +64,7 @@ export interface ActivityData {
 
 // background-color: ${({ theme }) => theme.colors.grayscale.light4};
 const WelcomeContainer = styled.div`
-  background: linear-gradient(rgba(252,98,32,1) 90vh, rgba(190,16,116,0.8), rgba(11,60,174,0.8));
+  background: linear-gradient(rgba(33, 150, 243, 1) 90vh, rgba(33, 150, 243, 0.8));
   nav {
     margin-top: -15px;
     background-color: ${({ theme }) => theme.colors.grayscale.light4};
