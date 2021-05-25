@@ -89,3 +89,5 @@ release.json
 messages.mo
 
 docker/requirements-local.txt
+conf/docker_stuff
+conf/resources/thumbnails

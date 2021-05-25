@@ -1,0 +1,109 @@
+version: "3.7"
+services:
+
+  superset:
+    env_file: superset.env
+    image: us.gcr.io/sertech-arq/superset:ab5b51850
+    restart: unless-stopped
+    expose:
+      - 8080
+    user: "root"
+    depends_on:
+      - meta_db
+      - redis
+    volumes: 
+      - superset:/app/superset_home
+      - ./superset:/app/conf
+    environment: 
+      - VIRTUAL_HOST=superset-dev.cmasc.io
+      - LETSENCRYPT_HOST=superset-dev.cmasc.io
+      - LETSENCRYPT_EMAIL=jcozain@sertech.mx
+
+  superset_worker:
+    image: us.gcr.io/sertech-arq/superset:ab5b51850
+    command: ["/app/docker/docker-bootstrap.sh", "worker"]
+    env_file: superset.env
+    restart: unless-stopped
+    shm_size: '2gb'
+    depends_on:
+      - meta_db
+      - redis
+    user: "root"
+    volumes: 
+      - superset:/app/superset_home
+      - ./superset:/app/docker
+      - ./superset:/app/conf
+
+  # superset saves here
+  meta_db:
+    env_file: meta_db.env
+    image: postgres:12
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    volumes:
+      - meta_db:/var/lib/postgresql/data
+      - ./docker_stuff/init_db/meta_db:/docker-entrypoint-initdb.d
+
+  postgis:
+    env_file: postgis.env
+    image: postgis/postgis:12-3.1-alpine
+    restart: unless-stopped
+    ports:
+      - 5433:5432
+    volumes:
+      - postgis:/var/lib/postgresql/data
+      - ./docker_stuff/init_db/postgis:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:3.2
+    restart: unless-stopped
+    expose:
+      - 6379
+    volumes:
+      - redis:/data
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.docker_gen
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - certs:/etc/nginx/certs
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+
+  webhook_proxy:
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - ./docker_stuff/nginx/hooks.conf:/etc/nginx/conf.d/default.conf
+    expose:
+      - 80
+    environment: 
+      - VIRTUAL_HOST=thinkific-hooks.novaoil.mx
+
+volumes:
+  superset:
+  meta_db:
+  postgis:
+  redis:
+  certs:
+  vhostd:
+  html:

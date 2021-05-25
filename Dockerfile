@@ -18,8 +18,8 @@
 ######################################################################
 # PY stage that simply does a pip install on our requirements
 ######################################################################
-ARG PY_VER=3.7.9
-FROM python:${PY_VER} AS superset-py
+#ARG PY_VER=3.7.9
+FROM python:3.8-buster AS superset-py
 
 RUN mkdir /app \
         && apt-get update -y \
@@ -48,7 +48,7 @@ RUN cd /app \
 FROM node:12 AS superset-node
 
 ARG NPM_BUILD_CMD="build"
-ENV BUILD_CMD=${NPM_BUILD_CMD}
+ENV NODE_OPTIONS=--max_old_space_size=16384
 
 # NPM ci first, as to NOT invalidate previous steps except for when package.json changes
 RUN mkdir -p /app/superset-frontend
@@ -61,17 +61,25 @@ RUN /frontend-mem-nag.sh \
 
 # Next, copy in the rest and let webpack do its thing
 COPY ./superset-frontend /app/superset-frontend
+
+# add maps to country map
+COPY ./conf/resources/maps/*.geojson /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/countries/
+COPY ./conf/resources/maps/*.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/
+
+#add mapbox layers to deckgl viz
+COPY ./conf/resources/deckgl/Shared_DeckGL.js /app/superset-frontend/node_modules/@superset-ui/legacy-preset-chart-deckgl/esm/utilities/Shared_DeckGL.js
+
 # This is BY FAR the most expensive step (thanks Terser!)
 RUN cd /app/superset-frontend \
-        && npm run ${BUILD_CMD} \
+        && npm run build \
         && rm -rf node_modules
 
 
 ######################################################################
 # Final lean image...
 ######################################################################
-ARG PY_VER=3.7.9
-FROM python:${PY_VER} AS lean
+
+FROM python:3.8-buster AS lean
 
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
@@ -90,11 +98,16 @@ RUN useradd --user-group --no-create-home --no-log-init --shell /bin/bash supers
             libpq-dev \
         && rm -rf /var/lib/apt/lists/*
 
-COPY --from=superset-py /usr/local/lib/python3.7/site-packages/ /usr/local/lib/python3.7/site-packages/
+COPY --from=superset-py /usr/local/lib/python3.8/site-packages/ /usr/local/lib/python3.8/site-packages/
+
 # Copying site-packages doesn't move the CLIs, so let's copy them one by one
 COPY --from=superset-py /usr/local/bin/gunicorn /usr/local/bin/celery /usr/local/bin/flask /usr/bin/
 COPY --from=superset-node /app/superset/static/assets /app/superset/static/assets
 COPY --from=superset-node /app/superset-frontend /app/superset-frontend
+
+# add firefox and webdriver
+COPY ./conf/resources/thumbnails/geckodriver-v0.29.0-linux64.tar.gz /installer/
+RUN apt update && apt install -y firefox-esr && tar -xf /installer/geckodriver-v0.29.0-linux64.tar.gz -C /usr/bin && chmod +x /usr/bin/geckodriver
 
 ## Lastly, let's install superset itself
 COPY superset /app/superset
@@ -118,13 +131,13 @@ ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
 ######################################################################
 # Dev image...
 ######################################################################
-FROM lean AS dev
+#FROM lean AS dev
 
-COPY ./requirements/*.txt ./docker/requirements-*.txt/ /app/requirements/
+#COPY ./requirements/*.txt ./docker/requirements-*.txt/ /app/requirements/
 
-USER root
+#USER root
 # Cache everything for dev purposes...
-RUN cd /app \
-    && pip install --no-cache -r requirements/docker.txt \
-    && pip install --no-cache -r requirements/requirements-local.txt || true
-USER superset
+#RUN cd /app \
+#    && pip install --no-cache -r requirements/docker.txt \
+#    && pip install --no-cache -r requirements/requirements-local.txt || true
+#USER superset
