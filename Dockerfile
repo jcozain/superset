@@ -51,12 +51,17 @@ ARG NPM_BUILD_CMD="build"
 ENV NODE_OPTIONS=--max_old_space_size=16384
 
 # NPM ci first, as to NOT invalidate previous steps except for when package.json changes
-RUN mkdir -p /app/superset-frontend
-RUN mkdir -p /app/superset/assets
+RUN mkdir -p /app/superset-frontend && mkdir -p /app/superset/assets && mkdir -p /app/superset-ui
+
 COPY ./docker/frontend-mem-nag.sh /
 COPY ./superset-frontend/package* /app/superset-frontend/
+
+#add plugins
+COPY ./conf/resources/superset-ui /app/superset-ui/
+
 RUN /frontend-mem-nag.sh \
         && cd /app/superset-frontend \
+        && npm link ../superset-ui/plugin-chart-hello-world\
         && npm ci
 
 # Next, copy in the rest and let webpack do its thing
@@ -68,6 +73,8 @@ COPY ./conf/resources/maps/*.js /app/superset-frontend/node_modules/@superset-ui
 
 #add mapbox layers to deckgl viz
 COPY ./conf/resources/deckgl/Shared_DeckGL.js /app/superset-frontend/node_modules/@superset-ui/legacy-preset-chart-deckgl/esm/utilities/Shared_DeckGL.js
+
+
 
 # This is BY FAR the most expensive step (thanks Terser!)
 RUN cd /app/superset-frontend \
