@@ -111,7 +111,7 @@ function DashboardTable({
     setPreparingExport(true);
   };
 
-
+/*
   const getFilters = (filterName?: string) => {
     const filters = [];
     if (filterName === 'Mine') {
@@ -129,7 +129,7 @@ function DashboardTable({
     }
     return filters;
   };
-
+*/
   const getData = (filter?: string) =>
     fetchData({
       pageIndex: 0,
@@ -140,7 +140,8 @@ function DashboardTable({
           desc: true,
         },
       ],
-      filters: getFilters(filter),
+      //filters: getFilters(filter),
+      filters:[]
     });
   console.log('DASHHH', dashboards);
 
