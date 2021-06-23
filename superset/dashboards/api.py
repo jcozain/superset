@@ -812,7 +812,7 @@ class DashboardRestApi(BaseSupersetModelRestApi):
         dashboard_url = get_url_path(
             "Superset.dashboard", dashboard_id_or_slug=dashboard.id
         )
-        print('========================= dashboard id from thumbnail api: '+str(dashboard.id)+' =====================================')
+        print('========================= dashboard id from thumbnail api: '+str(dashboard.slug)+' =====================================')
         """
         # If force, request a screenshot from the workers
         if kwargs["rison"].get("force", False):
@@ -836,7 +836,7 @@ class DashboardRestApi(BaseSupersetModelRestApi):
                 )
             )
         """
-        filepath = './config/img/ecologia.png'
+        filepath = './config/img/{}.png'.format(dashboard.slug)
         with open(filepath, 'rb') as fh:
           screenshot = BytesIO(fh.read())
         return Response(
