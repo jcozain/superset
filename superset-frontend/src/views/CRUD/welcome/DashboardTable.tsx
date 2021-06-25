@@ -52,7 +52,7 @@ import { CardContainer } from '../utils';
 import Loading from 'src/components/Loading';
 import handleResourceExport from 'src/utils/export';
 
-const PAGE_SIZE = 15;
+const PAGE_SIZE = 16;
 
 export interface FilterValue {
   col: string;
@@ -136,8 +136,8 @@ function DashboardTable({
       pageSize: PAGE_SIZE,
       sortBy: [
         {
-          id: 'changed_on_delta_humanized',
-          desc: true,
+          id: 'dashboard_title',
+          desc: false,
         },
       ],
       //filters: getFilters(filter),
@@ -264,6 +264,7 @@ function DashboardTable({
               openDashboardEditModal={() => {}}
               saveFavoriteStatus={(id: number, isStarred: boolean) => {}}
               favoriteStatus={false}
+              showThumbnails={true}
               handleBulkDashboardExport={handleBulkDashboardExport}
               coverLeft={false}
               actions={false}
