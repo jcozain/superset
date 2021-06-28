@@ -209,7 +209,7 @@ class Dashboard(  # pylint: disable=too-many-instance-attributes
         Returns a thumbnail URL with a HEX digest. We want to avoid browser cache
         if the dashboard has changed
         """
-        return f"/api/v1/dashboard/{self.id}/thumbnail/{self.digest}/"
+        return f"/static/assets/images/thumbnails/{self.slug}.png"
 
     @property
     def changed_by_name(self) -> str:
