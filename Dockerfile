@@ -62,8 +62,14 @@ RUN /frontend-mem-nag.sh \
         && cd /app/superset-frontend \
         && npm ci
 
+# add maps to country map
+COPY ./config/maps/*.geojson /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/countries/
+COPY ./config/maps/countries_esm.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/sountries.js
+COPY ./config/maps/countries_lib.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/lib/sountries.js
+
 # Next, copy in the rest and let webpack do its thing
 COPY ./superset-frontend /app/superset-frontend
+
 # This is BY FAR the most expensive step (thanks Terser!)
 RUN cd /app/superset-frontend \
         && npm run ${BUILD_CMD} \
@@ -95,10 +101,17 @@ RUN useradd --user-group --no-create-home --no-log-init --shell /bin/bash supers
         && rm -rf /var/lib/apt/lists/*
 
 COPY --from=superset-py /usr/local/lib/python3.7/site-packages/ /usr/local/lib/python3.7/site-packages/
+
 # Copying site-packages doesn't move the CLIs, so let's copy them one by one
 COPY --from=superset-py /usr/local/bin/gunicorn /usr/local/bin/celery /usr/local/bin/flask /usr/bin/
+
+# copy assets
 COPY --from=superset-node /app/superset/static/assets /app/superset/static/assets
 COPY --from=superset-node /app/superset-frontend /app/superset-frontend
+
+# copy extra assets [custom_thumbnails]
+COPY ./config/img/ /app/superset/static/assets/images
+
 
 ## Lastly, let's install superset itself
 COPY superset /app/superset
