@@ -73,15 +73,15 @@ function DashboardTable({
     //false,
   );
   //const [ preparingExport, setPreparingExport] = useState<boolean>(false);
-  const [ preparingExport,  setPreparingExport] = useState<boolean>(false);
-  const handleBulkDashboardExport = (dashboardsToExport: Dashboard[]) => {
+  const [ preparingExport] = useState<boolean>(false);
+  /*const handleBulkDashboardExport = (dashboardsToExport: Dashboard[]) => {
     /*const ids = dashboardsToExport.map(({ id }) => id);
     handleResourceExport('dashboard', ids, () => {
       setPreparingExport(false);
-    });*/
+    });
     setPreparingExport(true);
   };
-
+*/
   /*
   const dashboardIds = useMemo(() => dashboards.map(c => c.id), [dashboards]);
   const [saveFavoriteStatus, favoriteStatus] = useFavoriteStatus(
@@ -251,7 +251,7 @@ function DashboardTable({
               saveFavoriteStatus={(id: number, isStarred: boolean) => {}}
               favoriteStatus={false}
               showThumbnails={true}
-              handleBulkDashboardExport={handleBulkDashboardExport}
+              //handleBulkDashboardExport={handleBulkDashboardExport}
               coverLeft={false}
               actions={false}
             />
