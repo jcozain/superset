@@ -22,12 +22,11 @@ import withToasts from 'src/messageToasts/enhancers/withToasts';
 
 
 const SubheaderContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.grayscale.light4};
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(50, 50, 50, 0.2), rgba(70, 70, 70, 0.3) 85%, rgba(33, 150, 243, 1) 100%), url(/static/assets/images/gto_landscape.jpg);
+  background-color: ${({ theme }) => theme.colors.secondary.dark3};
+  background-image: url(/static/assets/images/gto_landscape.jpg);
   height: 100vh;
-  background-position: center;
-  background-size: cover;
-  background-repeat-x: no-repeat;
+  background-size: 100%;
+  background-repeat: no-repeat;
   position: absolute;
   width: 100%;
   top: 0;

@@ -65,7 +65,7 @@ export interface ActivityData {
 
 // background-color: ${({ theme }) => theme.colors.grayscale.light4};
 const WelcomeContainer = styled.div`
-  background: linear-gradient(rgba(33, 150, 243, 1) 90vh, rgba(33, 150, 243, 0.8));
+  background: ${({ theme }) => theme.colors.secondary.dark3};
   .ant-row.menu {
     margin-top: -15px;
     background-color: ${({ theme }) => theme.colors.grayscale.light4};
