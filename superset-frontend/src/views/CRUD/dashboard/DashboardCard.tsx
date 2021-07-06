@@ -48,12 +48,9 @@ interface DashboardCardProps {
   dashboardFilter?: string;
   userId?: number;
   showThumbnails?: boolean;
-<<<<<<< HEAD
-=======
   handleBulkDashboardExport: (dashboardsToExport: Dashboard[]) => void;
   coverLeft?: boolean;
   actions?: boolean;
->>>>>>> 82f0f3887... new style
 }
 
 function DashboardCard({
@@ -69,12 +66,9 @@ function DashboardCard({
   favoriteStatus,
   saveFavoriteStatus,
   showThumbnails,
-<<<<<<< HEAD
-=======
   handleBulkDashboardExport,
   coverLeft = true,
   actions = true,
->>>>>>> 82f0f3887... new style
 }: DashboardCardProps) {
   const canEdit = hasPerm('can_write');
   const canDelete = hasPerm('can_write');

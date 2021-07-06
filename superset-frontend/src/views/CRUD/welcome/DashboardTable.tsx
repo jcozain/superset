@@ -40,7 +40,7 @@ import DashboardCard from 'src/views/CRUD/dashboard/DashboardCard';
 import EmptyState from './EmptyState';
 import { CardContainer } from '../utils';
 import Loading from 'src/components/Loading';
-import handleResourceExport from 'src/utils/export';
+//import handleResourceExport from 'src/utils/export';
 
 const PAGE_SIZE = 16;
 
@@ -72,7 +72,16 @@ function DashboardTable({
     [],
     //false,
   );
-  
+  //const [ preparingExport, setPreparingExport] = useState<boolean>(false);
+  const [ preparingExport,  setPreparingExport] = useState<boolean>(false);
+  const handleBulkDashboardExport = (dashboardsToExport: Dashboard[]) => {
+    /*const ids = dashboardsToExport.map(({ id }) => id);
+    handleResourceExport('dashboard', ids, () => {
+      setPreparingExport(false);
+    });*/
+    setPreparingExport(true);
+  };
+
   /*
   const dashboardIds = useMemo(() => dashboards.map(c => c.id), [dashboards]);
   const [saveFavoriteStatus, favoriteStatus] = useFavoriteStatus(
@@ -87,17 +96,7 @@ function DashboardTable({
   useEffect(() => {
     getData(dashboardFilter);
   }, [dashboardFilter]);
-*/
-  const [ preparingExport, setPreparingExport] = useState<boolean>(false);
-  const handleBulkDashboardExport = (dashboardsToExport: Dashboard[]) => {
-    const ids = dashboardsToExport.map(({ id }) => id);
-    handleResourceExport('dashboard', ids, () => {
-      setPreparingExport(false);
-    });
-    setPreparingExport(true);
-  };
 
-/*
   const getFilters = (filterName?: string) => {
     const filters = [];
     if (filterName === 'Mine') {
