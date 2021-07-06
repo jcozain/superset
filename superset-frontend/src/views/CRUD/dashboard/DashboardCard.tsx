@@ -48,7 +48,7 @@ interface DashboardCardProps {
   dashboardFilter?: string;
   userId?: number;
   showThumbnails?: boolean;
-  handleBulkDashboardExport: (dashboardsToExport: Dashboard[]) => void;
+  //handleBulkDashboardExport: (dashboardsToExport: Dashboard[]) => void;
   coverLeft?: boolean;
   actions?: boolean;
 }
@@ -66,7 +66,7 @@ function DashboardCard({
   favoriteStatus,
   saveFavoriteStatus,
   showThumbnails,
-  handleBulkDashboardExport,
+  //handleBulkDashboardExport,
   coverLeft = true,
   actions = true,
 }: DashboardCardProps) {
