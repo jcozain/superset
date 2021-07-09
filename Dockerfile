@@ -62,13 +62,13 @@ RUN /frontend-mem-nag.sh \
         && cd /app/superset-frontend \
         && npm ci
 
-# add maps to country map
-COPY ./config/maps/*.geojson /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/countries/
-COPY ./config/maps/countries_esm.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/sountries.js
-COPY ./config/maps/countries_lib.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/lib/sountries.js
-
 # Next, copy in the rest and let webpack do its thing
 COPY ./superset-frontend /app/superset-frontend
+
+# add maps to country map
+COPY ./config/maps/*.geojson /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/countries/
+COPY ./config/maps/countries_esm.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/countries.js
+COPY ./config/maps/countries_lib.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/lib/countries.js
 
 # This is BY FAR the most expensive step (thanks Terser!)
 RUN cd /app/superset-frontend \
@@ -104,6 +104,10 @@ COPY --from=superset-py /usr/local/lib/python3.7/site-packages/ /usr/local/lib/p
 
 # Copying site-packages doesn't move the CLIs, so let's copy them one by one
 COPY --from=superset-py /usr/local/bin/gunicorn /usr/local/bin/celery /usr/local/bin/flask /usr/bin/
+
+# install authlib manualy
+
+RUN cd /app && pip install authlib
 
 # copy assets
 COPY --from=superset-node /app/superset/static/assets /app/superset/static/assets
