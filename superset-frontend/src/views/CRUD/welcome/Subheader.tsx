@@ -44,7 +44,7 @@ const Title = styled.label`
 function Subheader() {
   return (
     <SubheaderContainer>
-      <Title>Consulta y Analítica Prospectiva para la Gobernabilidad del Estado de Guanajuato</Title>
+      <Title>Datos Guanajuato</Title>
     </SubheaderContainer>
   );
 }
