@@ -21,13 +21,14 @@ import { t, styled } from '@superset-ui/core';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import NavDropdown from 'src/components/NavDropdown';
 import { Menu as DropdownMenu } from 'src/common/components';
-import { Link } from 'react-router-dom';
-import MenuObject, {
+//import { Link } from 'react-router-dom';
+//import MenuObject;
+import {
   MenuObjectProps,
   MenuObjectChildProps,
 } from './MenuObject';
 import LanguagePicker, { Languages } from './LanguagePicker';
-import NewMenu from './NewMenu';
+//import NewMenu from './NewMenu';
 
 interface BrandProps {
   path: string;
@@ -171,7 +172,7 @@ export function Menu({
           <Navbar.Toggle />
         </Navbar.Header>
         <Nav data-test="navbar-top">
-          {menu.map((item, index) => {
+          {/*menu.map((item, index) => {
             const props = {
               ...item,
               isFrontendRoute: isFrontendRoute(item.url),
@@ -187,10 +188,10 @@ export function Menu({
               }),
             };
             return <MenuObject {...props} key={item.label} index={index + 1} />;
-          })}
+          })*/}
         </Nav>
         <Nav className="navbar-right">
-          {!navbarRight.user_is_anonymous && <NewMenu />}
+          {/*!navbarRight.user_is_anonymous && <NewMenu />*/}
           <NavDropdown
             id="settings-dropdown"
             title={t('Settings')}
@@ -200,7 +201,7 @@ export function Menu({
             open={dropdownOpen}
           >
             <DropdownMenu>
-              {settings.map((section, index) => [
+              {/*settings.map((section, index) => [
                 <DropdownMenu.ItemGroup
                   key={`${section.label}`}
                   title={section.label}
@@ -221,7 +222,7 @@ export function Menu({
                   })}
                 </DropdownMenu.ItemGroup>,
                 index < settings.length - 1 && <DropdownMenu.Divider />,
-              ])}
+              ])*/}
 
               {!navbarRight.user_is_anonymous && [
                 <DropdownMenu.Divider key="user-divider" />,
