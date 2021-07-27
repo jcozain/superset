@@ -56,7 +56,7 @@ const ShareMenuItems = (props: ShareMenuItemProps) => {
     }
   }
 
-  async function onShareByEmail() {
+  /*async function onShareByEmail() {
     try {
       const shortUrl = await getShortUrl();
       const bodyWithLink = `${emailBody}${shortUrl}`;
@@ -64,20 +64,20 @@ const ShareMenuItems = (props: ShareMenuItemProps) => {
     } catch (error) {
       addDangerToast(t('Sorry, something went wrong. Try again later.'));
     }
-  }
+  }*/
 
   return (
     <>
       <Menu.Item key="copy-url" {...rest}>
         <div onClick={onCopyLink} role="button" tabIndex={0}>
-          {copyMenuItemTitle}
+          {'Copiar Link'/*copyMenuItemTitle*/}
         </div>
       </Menu.Item>
-      <Menu.Item key="share-by-email" {...rest}>
+      {/*<Menu.Item key="share-by-email" {...rest}>
         <div onClick={onShareByEmail} role="button" tabIndex={0}>
           {emailMenuItemTitle}
         </div>
-      </Menu.Item>
+  </Menu.Item>*/}
     </>
   );
 };
