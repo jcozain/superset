@@ -65,6 +65,10 @@ RUN /frontend-mem-nag.sh \
 # Next, copy in the rest and let webpack do its thing
 COPY ./superset-frontend /app/superset-frontend
 
+# extra mapbox styles
+COPY ./config/deckgl/Shared_DeckGL_esm.js /app/superset-frontend/node_modules/@superset-ui/legacy-preset-chart-deckgl/esm/utilities/Shared_DeckGL.js
+COPY ./config/deckgl/Shared_DeckGL_lib.js /app/superset-frontend/node_modules/@superset-ui/legacy-preset-chart-deckgl/lib/utilities/Shared_DeckGL.js
+
 # add maps to country map
 COPY ./config/maps/*.geojson /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/countries/
 COPY ./config/maps/countries_esm.js /app/superset-frontend/node_modules/@superset-ui/legacy-plugin-chart-country-map/esm/countries.js
