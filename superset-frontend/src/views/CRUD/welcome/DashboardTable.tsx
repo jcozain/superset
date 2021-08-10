@@ -42,7 +42,7 @@ import { CardContainer } from '../utils';
 import Loading from 'src/components/Loading';
 //import handleResourceExport from 'src/utils/export';
 
-const PAGE_SIZE = 16;
+const PAGE_SIZE = 20;
 
 export interface FilterValue {
   col: string;
