@@ -24,27 +24,46 @@ import withToasts from 'src/messageToasts/enhancers/withToasts';
 const SubheaderContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondary.dark3};
   background-image: url(/static/assets/images/gto_landscape.jpg);
-  height: 100vh;
-  background-size: 100%;
+  height: 65vh;
+  background-size: cover;
   background-repeat: no-repeat;
   position: absolute;
   width: 100%;
   top: 0;
 `;
 
-const Title = styled.label`
+const TextContainer = styled.div`
   color: ${({ theme }) => theme.colors.grayscale.light5};
+  position: absolute;
+  max-width: min(90%, 550px);
+  top: 150px;
+  left: 15%;
+  font-family: tahoma;
+  margin: 0 10px;
+  text-shadow: 0.5px 0 0 #000, 0 -0.5px 0 #000, 0 0.5px 0 #000, -0.5px 0 0 #000;
+`;
+
+const Title = styled.label`
   font-size: 50px;
   font-weight: bold;
-  position: absolute;
-  left: 30px;
-  top: 70px;
+`;
+
+const Subtitle = styled.p`
+  font-size: 15px;
+  margin: 50px 0 10px 0;
+  font-weight: 500;
 `;
 
 function Subheader() {
   return (
     <SubheaderContainer>
-      <Title>Datos Guanajuato</Title>
+      <TextContainer>
+        <Title>Datos Guanajuato</Title>
+        <Subtitle>
+          Datos Guanajuato integra fuentes de información para conocer mejor el estado y sus municipios.
+          Permite visualizar interactivamente, descargar información y generar reportes que cuentan historias en datos.
+        </Subtitle>
+      </TextContainer>
     </SubheaderContainer>
   );
 }

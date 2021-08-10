@@ -120,7 +120,7 @@ const WelcomeContainer = styled.div`
   }
 `;*/
 const DashboardTableContainer = styled.div`
-  margin-top: 50vh;
+  margin-top: 45vh;
 `;
 
 function Welcome({ user, addDangerToast }: WelcomeProps) {
